@@ -21,13 +21,13 @@ You need Go installed to build from source. If you already have Go, skip to [Bui
 
 ```bash
 sudo apt update
-sudo apt install -y golang-go git
+sudo apt install -y golang-go git libnotify-bin
 ```
 
 ### Arch
 
 ```bash
-sudo pacman -Sy --needed go git
+sudo pacman -Sy --needed go git libnotify
 ```
 
 ### Build and install
@@ -60,7 +60,7 @@ Type a message, hit enter. Ctrl+D to quit — `pulsed` keeps running in the back
 
 - History is in-memory only and resets if `pulsed` restarts.
 - Desktop notifications fire only when no `pulse` window is currently open, so you don't get double-pinged.
-- Requires a `notify-send`-compatible desktop notification daemon (ships by default on GNOME, KDE, most desktop Linux setups).
+- Notifications need `notify-send` (from `libnotify`), installed as part of the steps above. If popups don't show up, check that a notification daemon is actually running on your desktop (GNOME, KDE, and most desktop environments ship one by default; minimal window-manager setups may not).
 
 ## Uninstall
 
