@@ -15,15 +15,36 @@ Messages go out over UDP broadcast, so everyone on the same network/hotspot sees
 
 ## Install
 
+You need Go installed to build from source. If you already have Go, skip to [Build and install](#build-and-install).
+
+### Debian / Ubuntu
+
 ```bash
-git clone git@github.com:aayushyatiwari/pulse.git
+sudo apt update
+sudo apt install -y golang-go git
+```
+
+### Arch
+
+```bash
+sudo pacman -Sy --needed go git
+```
+
+### Build and install
+
+Same on every distro from here — this is the actual install, nothing distro-specific left:
+
+```bash
+git clone https://github.com/aayushyatiwari/pulse.git
 cd pulse
 go build -o pulsed .
 cd cli && go build -o pulse . && cd ..
 ./install.sh
 ```
 
-Works on any systemd-based Linux distro (Ubuntu, Arch, etc.) — no other dependencies.
+`install.sh` copies both binaries to `/usr/local/bin` and sets up the systemd service — identical on any systemd-based distro.
+
+If you'd rather skip building it yourself, ask whoever's sharing this project for the prebuilt `pulsed` and `pulse` binaries directly, then just run `./install.sh` — no Go required at all in that case.
 
 ## Usage
 
