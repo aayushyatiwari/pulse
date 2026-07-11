@@ -1,21 +1,15 @@
 # pulse
 
-A tiny LAN chat system for a group on the same network (like a shared hotspot). No server, no accounts — everyone's machine talks directly to everyone else's over UDP broadcast.
+A tiny LAN chat for a group on the same network, like a shared hotspot. No server, no accounts, no internet needed — everyone's machine talks directly to everyone else's over UDP broadcast.
 
-Two pieces:
+- **pulsed** — a background service, always running, listens for messages, keeps recent history in memory, and sends a desktop notification when a message arrives and you're not actively chatting.
+- **pulse** — the chat window itself. Run it, type, see everyone's messages live.
 
-- **pulsed** — a background service. Always running. Listens for messages, keeps recent history in memory, sends desktop notifications when you're not actively chatting.
-- **pulse** — the chat window. Run it, type, see everyone's messages live.
-
-## How it works
-
-`pulsed` runs once per machine, in the background, all the time. When you want to chat, you open a terminal and run `pulse` — it connects to your own local `pulsed`, shows you recent history, and streams new messages live. Close it whenever, `pulsed` keeps running and you won't miss anything sent while you were away (as long as `pulsed` itself hasn't restarted).
-
-Messages go out over UDP broadcast, so everyone on the same network/hotspot sees them — no central server, no internet required.
+Type `pulse` in any terminal on the same network and you're in.
 
 ## Install
 
-You need Go installed to build from source. If you already have Go, skip to [Build and install](#build-and-install).
+You need Go and `notify-send` (for desktop notifications) installed to build from source.
 
 ### Debian / Ubuntu
 
@@ -30,9 +24,7 @@ sudo apt install -y golang-go git libnotify-bin
 sudo pacman -Sy --needed go git libnotify
 ```
 
-### Build and install
-
-Same on every distro from here — this is the actual install, nothing distro-specific left:
+### Build and install (same on every distro)
 
 ```bash
 git clone https://github.com/aayushyatiwari/pulse.git
@@ -42,30 +34,45 @@ cd cli && go build -o pulse . && cd ..
 ./install.sh
 ```
 
-`install.sh` copies both binaries to `/usr/local/bin` and sets up the systemd service — identical on any systemd-based distro.
+This builds both binaries, copies them to `/usr/local/bin`, and sets up `pulsed` as a systemd **user service** — so it starts with your login session and can actually reach your desktop to show notifications.
 
-If you'd rather skip building it yourself, ask whoever's sharing this project for the prebuilt `pulsed` and `pulse` binaries directly, then just run `./install.sh` — no Go required at all in that case.
+By default, `pulsed` stops when you log out. To keep it running even while logged out (e.g. over SSH), run:
+
+```bash
+loginctl enable-linger $USER
+```
 
 ## Usage
-
-Once installed, from any terminal:
 
 ```bash
 pulse
 ```
 
-Type a message, hit enter. Ctrl+D to quit — `pulsed` keeps running in the background regardless.
+Type a message, hit enter. Ctrl+D to quit — `pulsed` keeps running in the background regardless, so you won't miss anything sent while `pulse` was closed (as long as `pulsed` itself hasn't restarted, which resets history).
+
+## Checking it's running
+
+```bash
+systemctl --user status pulsed
+```
+
+Live logs:
+
+```bash
+journalctl --user -u pulsed -f
+```
 
 ## Notes
 
 - History is in-memory only and resets if `pulsed` restarts.
-- Desktop notifications fire only when no `pulse` window is currently open, so you don't get double-pinged.
-- Notifications need `notify-send` (from `libnotify`), installed as part of the steps above. If popups don't show up, check that a notification daemon is actually running on your desktop (GNOME, KDE, and most desktop environments ship one by default; minimal window-manager setups may not).
+- Notifications fire only when no `pulse` window is open, so you don't get double-pinged.
+- `pulsed` must run as a **user service**, not a system service — desktop notifications require access to your session's D-Bus bus, which system-level services don't have.
 
 ## Uninstall
 
 ```bash
-sudo systemctl disable --now pulsed@$USER
-sudo rm /usr/local/bin/pulsed /usr/local/bin/pulse /etc/systemd/system/pulsed@.service
-sudo systemctl daemon-reload
+systemctl --user disable --now pulsed
+rm ~/.config/systemd/user/pulsed.service
+sudo rm /usr/local/bin/pulsed /usr/local/bin/pulse
+systemctl --user daemon-reload
 ```
