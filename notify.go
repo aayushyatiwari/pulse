@@ -2,8 +2,11 @@ package main
 
 import (
 	"os/exec"
+	"fmt"
 )
-
 func notify(line string) {
-	exec.Command("notify-send", "pulse", line).Run()
+	err := exec.Command("notify-send", "pulse", line).Run()
+	if err != nil {
+		fmt.Println("notify error:", err)
+	}
 }
