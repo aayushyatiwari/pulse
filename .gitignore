@@ -1,4 +1,17 @@
-# Local build artifacts
-/pulsed
-/build_release.sh
-/cli/pulse
+# binaries
+pulsed
+pulse
+dist/
+
+# Go build cache
+*.test
+*.out
+
+# env / secrets
+.env
+
+# editor
+.vscode/
+.idea/
+*.swp
+*.swo

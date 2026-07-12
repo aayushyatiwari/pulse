@@ -1,12 +1,13 @@
 package main
 
 import (
-	"os/exec"
 	"fmt"
+	"os/exec"
 )
-func notify(line string) {
+
+func Notify(line string) {
 	err := exec.Command("notify-send", "pulse", line).Run()
 	if err != nil {
-		fmt.Println("notify error:", err)
+		fmt.Printf("notify-send error: %v\n", err)
 	}
 }

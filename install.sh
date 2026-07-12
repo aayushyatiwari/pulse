@@ -1,19 +1,36 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
 
-systemctl --user stop pulsed 2>/dev/null || true
+REPO="imaayush/pulse"
+INSTALL_DIR="${INSTALL_DIR:-/usr/local/bin}"
 
-sudo cp pulsed /usr/local/bin/pulsed
-sudo cp cli/pulse /usr/local/bin/pulse
+# ── checks ────────────────────────────────────────────────────────────────────
 
-mkdir -p ~/.config/systemd/user
-cp pulsed.service ~/.config/systemd/user/pulsed.service
+if ! command -v go &>/dev/null; then
+    echo "error: Go is required — https://go.dev/dl/"
+    exit 1
+fi
 
-systemctl --user daemon-reload
-systemctl --user enable --now pulsed
+# ── build ─────────────────────────────────────────────────────────────────────
 
-echo "installed. type 'pulse' in any terminal to chat."
+TMP=$(mktemp -d)
+trap 'rm -rf "$TMP"' EXIT
+
+echo "→ cloning github.com/$REPO"
+git clone --depth 1 "https://github.com/$REPO.git" "$TMP"
+
+echo "→ building"
+cd "$TMP"
+go build -o pulsed ./backend/
+go build -o pulse   ./frontend/
+
+# ── install ───────────────────────────────────────────────────────────────────
+
+echo "→ installing to $INSTALL_DIR (may require sudo)"
+sudo install -m 755 pulsed pulse "$INSTALL_DIR"
+
 echo ""
-echo "note: pulsed normally stops when you log out."
-echo "to keep it running even when logged out, run:"
-echo "  loginctl enable-linger \$USER"
+echo "✓ installed pulsed and pulse to $INSTALL_DIR"
+echo ""
+echo "  start the daemon:  pulsed"
+echo "  open the chat:     pulse"
