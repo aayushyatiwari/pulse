@@ -1,1 +1,4 @@
-pulsed
+# Local build artifacts
+/pulsed
+/build_release.sh
+/cli/pulse
