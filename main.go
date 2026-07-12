@@ -75,8 +75,31 @@ func main() {
 			}
 			ip := addr.IP.String()
 			ts := time.Now().Format("15:04:05")
-			text := strings.TrimSpace(string(buf[:n]))
-			line := fmt.Sprintf("%s at %s: \"%s\"", ip, ts, text)
+			raw := strings.TrimSpace(string(buf[:n]))
+
+			var sender, text string
+			if strings.HasPrefix(raw, "PULSE:") {
+				// Wire format: PULSE:<name>|<tag>|<message>
+				payload := strings.TrimPrefix(raw, "PULSE:")
+				parts := strings.SplitN(payload, "|", 3)
+				if len(parts) == 3 {
+					name, tag, msg := parts[0], parts[1], parts[2]
+					if tag != "" {
+						sender = fmt.Sprintf("%s [%s] (%s)", name, tag, ip)
+					} else {
+						sender = fmt.Sprintf("%s (%s)", name, ip)
+					}
+					text = msg
+				} else {
+					sender = ip
+					text = raw
+				}
+			} else {
+				sender = ip
+				text = raw
+			}
+
+			line := fmt.Sprintf("%s at %s: \"%s\"", sender, ts, text)
 			history.Add(line)
 			clients.Broadcast(line)
 			if clients.Count() == 0 {

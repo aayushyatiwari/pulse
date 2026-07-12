@@ -11,23 +11,27 @@ Type `pulse` in any terminal on the same network and you're in.
 
 ## Install
 
-It's easy. Two things. One install the required packages, Two run the clone command. And you're done.
-
-### The library code
-#### Debian / Ubuntu 
+### One-liner (recommended)
 
 ```bash
-sudo apt update
-sudo apt install -y golang-go git libnotify-bin
+curl -fsSL https://raw.githubusercontent.com/aayushyatiwari/pulse/main/get.sh | bash
 ```
 
-#### Arch
+That's it. No Go, no git, nothing else needed. Works on `x86_64` and `arm64` Linux.
+
+The only thing it needs is `libnotify` for desktop notifications:
 
 ```bash
-sudo pacman -Sy --needed go git libnotify
+# Debian / Ubuntu
+sudo apt install -y libnotify-bin
+
+# Arch
+sudo pacman -S libnotify
 ```
 
-### Build and install (same on every distro)
+---
+
+### Build from source (for contributors / hackers)
 
 ```bash
 git clone https://github.com/aayushyatiwari/pulse.git
