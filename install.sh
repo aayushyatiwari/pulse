@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# curl -fsSL https://raw.githubusercontent.com/imaayush/pulse/main/install.sh | bash
+# curl -fsSL https://raw.githubusercontent.com/aayushyatiwari/pulse/main/install.sh | bash
 set -e
 
-REPO="imaayush/pulse"
+REPO="aayushyatiwari/pulse"
 BIN_DIR="$HOME/.local/bin"
 SERVICE_DIR="$HOME/.config/systemd/user"
 

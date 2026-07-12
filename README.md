@@ -32,12 +32,12 @@ For desktop notifications to work when the CLI is closed, the backend daemon (`p
 You can install both binaries and automatically set up the `pulsed` background service (via systemd on Linux or launchd on macOS) with a single command:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/imaayush/pulse/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/aayushyatiwari/pulse/main/install.sh | bash
 ```
 
 ### Option 2: Download Pre-compiled Binaries
 
-If you prefer not to run the install script, you can download the latest binaries directly from the [GitHub Releases](https://github.com/imaayush/pulse/releases) page.
+If you prefer not to run the install script, you can download the latest binaries directly from the [GitHub Releases](https://github.com/aayushyatiwari/pulse/releases) page.
 
 1. Download the `pulse` and `pulsed` binaries for your platform (Linux/macOS, amd64/arm64).
 2. Make them executable:
@@ -56,7 +56,7 @@ If you want to contribute or build from source, you will need [Go 1.22+](https:/
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/imaayush/pulse.git
+   git clone https://github.com/aayushyatiwari/pulse.git
    cd pulse
    ```
 2. Build the binaries:
