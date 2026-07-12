@@ -22,11 +22,11 @@ That's it. No Go, no git, nothing else needed. Works on `x86_64` and `arm64` Lin
 The only thing it needs is `libnotify` for desktop notifications:
 
 ```bash
-# Debian / Ubuntu
-sudo apt install -y libnotify-bin
-
 # Arch
 sudo pacman -S libnotify
+
+# Debian / Ubuntu
+sudo apt install -y libnotify-bin
 ```
 
 ---
