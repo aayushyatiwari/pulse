@@ -3,7 +3,7 @@
 # Usage: ./release.sh v1.0.0
 set -e
 
-VERSION=${1:-v2.0.0}
+VERSION=${1:?usage: ./release.sh <version>  e.g. ./release.sh v2.0.1}
 
 TARGETS=(
     linux/amd64
@@ -30,7 +30,6 @@ done
 # ── release ───────────────────────────────────────────────────────────────────
 
 echo "→ creating release $VERSION"
-gh release delete "$VERSION" --yes 2>/dev/null || true
 gh release create "$VERSION" dist/* \
     --title "Pulse $VERSION" \
     --notes "## Install
