@@ -1,5 +1,7 @@
 # Pulse
 
+In-detail write-up: https://tiwariji.net/posts/pulse/
+
 Pulse is a lightweight, LAN-based chat and event-broadcasting system. It allows users on the same network (e.g., a mobile hotspot) to chat seamlessly via UDP broadcast.
 
 The project consists of:
